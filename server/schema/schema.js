@@ -3,7 +3,8 @@ const {
   GraphQLObjectType,
   GraphQLInt,
   GraphQLString,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLList
 } = require('graphql');
 
 const _ = require('lodash');
@@ -26,10 +27,10 @@ const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   fields: {
     department: {
-        type: DepartmentType,
+        type: new GraphQLList(DepartmentType),
         args: { id: { type: GraphQLInt } },
         resolve: async (parentValue, args) => {
-          return await get(`${DEPT_URI}/${args.id}`);
+          return args.id ? await get(`${DEPT_URI}/${args.id}`) : await get(`${DEPT_URI}`) ;
         }
     }
   }
