@@ -50,7 +50,7 @@ const CategoryType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   fields: {
-    deapartment: {
+    department: {
         type: DepartmentType,
         args: { id: { type: GraphQLInt } },
         resolve: async (parentValue, args) => {
