@@ -31,32 +31,37 @@ const DepartmentType = new GraphQLObjectType({
   })
 });
 
-
 // categories
 const CategoryType = new GraphQLObjectType({
   name: 'Category',
   fields: () => ({
     category_id: { type: GraphQLInt },
     name: { type: GraphQLString },
-    description: { type: GraphQLString }
+    description: { type: GraphQLString },
+    department_id: { type: GraphQLInt }
   })
 });
+
+// attributes
+
 
 
 // Root queries
 const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   fields: {
-    dept: {
-        type: new GraphQLList(DepartmentType),
-        args: { department_id: { type: GraphQLInt } },
+    deapartment: {
+        type: DepartmentType,
+        args: { id: { type: GraphQLInt } },
         resolve: async (parentValue, args) => {
-          const data = args.department_id ? await get(`${DEPT_URI}/${args.department_id}`) : await get(`${DEPT_URI}`) ;
-          if (!Array.isArray(data)) {
-            return Array(data);
-          }
-          return data;
+          return await get(`${DEPT_URI}/${args.id}`);
         }
+    },
+    departments: {
+      type: new GraphQLList(DepartmentType),
+      resolve: async (parentValue, args) => {
+        return await get(`${DEPT_URI}`);
+      }
     }
   }
 });
